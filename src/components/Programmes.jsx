@@ -13,7 +13,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
 
   const fetchProgrammes = () => {
     axios
-      .get(`${config.API_URL}/api/programmes`)
+      .get(`${config.API_URL}/programmes`)
       .then((res) => {
         setProgrammes(res.data);
         setLoading(false);
@@ -30,7 +30,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
 
   const handleSave = async (prog) => {
     try {
-      await axios.put(`${config.API_URL}/api/programmes/${prog._id}`, {
+      await axios.put(`${config.API_URL}/programmes/${prog._id}`, {
         title: prog.title,
         description: prog.description,
         color: prog.color,
@@ -53,7 +53,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
 
     try {
       await axios.post(
-        `${config.API_URL}/api/programmes/${prog._id}/upload-icon`,
+        `${config.API_URL}/programmes/${prog._id}/upload-icon`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -68,7 +68,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this programme?")) return;
     try {
-      await axios.delete(`${config.API_URL}/api/programmes/${id}`);
+      await axios.delete(`${config.API_URL}/programmes/${id}`);
       fetchProgrammes();
       alert("Programme deleted!");
     } catch (err) {
@@ -84,7 +84,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
     }
 
     try {
-      const res = await axios.post(`${config.API_URL}/api/programmes`, {
+      const res = await axios.post(`${config.API_URL}/programmes`, {
         title: newProg.title,
         description: newProg.description,
         color: newProg.color,
@@ -95,7 +95,7 @@ const Programmes = ({ isAdmin = false, limit, showAll = false, showBackButton = 
       if (newProg.icon) {
         const formData = new FormData();
         formData.append("file", newProg.icon);
-        await axios.post(`${config.API_URL}/api/programmes/${createdProg._id}/upload-icon`, formData, {
+        await axios.post(`${config.API_URL}/programmes/${createdProg._id}/upload-icon`, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
       }

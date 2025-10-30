@@ -11,7 +11,7 @@ const DeclarationAdmin = () => {
   useEffect(() => {
     const fetchDeclaration = async () => {
       try {
-        const res = await axios.get(`${config.API_URL}/api/declaration`);
+        const res = await axios.get(`${config.API_URL}/declaration`);
         setDeclaration(res.data);
       } catch (err) {
         console.error("Error fetching declaration:", err);
@@ -28,7 +28,7 @@ const DeclarationAdmin = () => {
   const saveDeclaration = async () => {
     setSaving(true);
     try {
-      await axios.put(`${config.API_URL}/api/declaration`, declaration);
+      await axios.put(`${config.API_URL}/declaration`, declaration);
       alert("Declaration updated successfully!");
     } catch (err) {
       console.error("Error updating declaration:", err);

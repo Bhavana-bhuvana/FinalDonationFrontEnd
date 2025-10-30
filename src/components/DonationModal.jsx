@@ -408,7 +408,7 @@ import axios from "axios";
 import config from "../config";
 
 function DonationModal() {
-  const API_BASE = `${config.API_URL}/api`;
+  const API_BASE = `${config.API_URL}`;
 
   // local UI state
   const [amount, setAmount] = useState("");

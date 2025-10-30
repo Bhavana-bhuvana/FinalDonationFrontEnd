@@ -13,7 +13,7 @@ const ProgrammeDetail = ({ isAdmin = false }) => { // ✅ prop-based admin contr
 
   useEffect(() => {
     axios
-      .get(`${config.API_URL}/api/programmes/${id}`)
+      .get(`${config.API_URL}/programmes/${id}`)
       .then((res) => {
         setProgramme(res.data);
         setLoading(false);

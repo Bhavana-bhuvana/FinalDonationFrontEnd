@@ -161,7 +161,7 @@ const Hero = ({ isAdmin = false }) => {
   // Fetch hero data
   useEffect(() => {
     axios
-      .get(`${config.API_URL}/api/hero`)
+      .get(`${config.API_URL}/hero`)
       .then((res) => {
         setHero(res.data);
         setEditingHero(res.data);
@@ -173,7 +173,7 @@ const Hero = ({ isAdmin = false }) => {
   // Save text/icons/background updates
   const handleSave = async () => {
     try {
-      const res = await axios.put(`${config.API_URL}/api/hero`, editingHero);
+      const res = await axios.put(`${config.API_URL}/hero`, editingHero);
       setHero(res.data);
       setEditingHero(res.data);
       alert("Hero updated successfully!");
@@ -191,7 +191,7 @@ const Hero = ({ isAdmin = false }) => {
     formData.append("file", file);
 
     try {
-      const res = await axios.post(`${config.API_URL}/api/hero/upload-image`, formData, {
+      const res = await axios.post(`${config.API_URL}/hero/upload-image`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setEditingHero((prev) => ({ ...prev, backgroundImage: res.data.backgroundImage }));

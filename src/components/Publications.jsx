@@ -14,7 +14,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
 
   const fetchPublications = () => {
     axios
-      .get(`${config.API_URL}/api/publications`)
+      .get(`${config.API_URL}/publications`)
       .then((res) => {
         setPublications(res.data);
         setLoading(false);
@@ -31,7 +31,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
 
   const handleSave = async (pub) => {
     try {
-      await axios.put(`${config.API_URL}/api/publications/${pub.id}`, {
+      await axios.put(`${config.API_URL}/publications/${pub.id}`, {
         title: pub.title,
         description: pub.description,
         summary: pub.summary,
@@ -55,7 +55,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
 
     try {
       await axios.post(
-        `${config.API_URL}/api/publications/${pub.id}/upload-image`,
+        `${config.API_URL}/publications/${pub.id}/upload-image`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -71,7 +71,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
     if (!window.confirm("Are you sure you want to delete this publication?")) return;
 
     try {
-      await axios.delete(`${config.API_URL}/api/publications/${id}`);
+      await axios.delete(`${config.API_URL}/publications/${id}`);
       fetchPublications();
       alert("Publication deleted!");
     } catch (err) {
@@ -87,7 +87,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
     }
 
     try {
-      const res = await axios.post(`${config.API_URL}/api/publications`, {
+      const res = await axios.post(`${config.API_URL}/publications`, {
         title: newPub.title,
         description: newPub.description,
         summary: newPub.summary,
@@ -101,7 +101,7 @@ const Publications = ({ isAdmin = false, limit, showAll = false, showBackButton 
         formData.append("file", newPub.image);
 
         await axios.post(
-          `${config.API_URL}/api/publications/${createdPub.id}/upload-image`,
+          `${config.API_URL}/publications/${createdPub.id}/upload-image`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );

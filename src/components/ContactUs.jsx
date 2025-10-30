@@ -28,7 +28,7 @@ export default function ContactUs() {
   }, []);
   const onSubmit = (data) => {
   setSending(true);
-  axios.post(`${config.API_URL}/api/contact`, data)
+  axios.post(`${config.API_URL}/contact`, data)
     .then(() => {
       alert("Message sent successfully!");
       reset();

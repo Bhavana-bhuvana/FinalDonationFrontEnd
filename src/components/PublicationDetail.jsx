@@ -147,7 +147,7 @@ const PublicationDetail = ({ isAdmin = false }) => {  // ✅ receive as prop
 
   useEffect(() => {
     axios
-      .get(`${config.API_URL}/api/publications/${id}`)
+      .get(`${config.API_URL}/publications/${id}`)
       .then((res) => {
         setPublication(res.data);
         setLoading(false);
@@ -161,7 +161,7 @@ const PublicationDetail = ({ isAdmin = false }) => {  // ✅ receive as prop
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete this publication?")) return;
     axios
-      .delete(`${config.API_URL}/api/publications/${id}`)
+      .delete(`${config.API_URL}/publications/${id}`)
       .then(() => {
         alert("Publication deleted!");
         navigate("/admin/publications");

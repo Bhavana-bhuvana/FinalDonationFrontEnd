@@ -7,7 +7,7 @@ import config from "../src/config";
 import { FiInfo } from "react-icons/fi";
 
 export default function FilterDonors() {
-  const API_BASE = `${config.API_URL}/api/donors`;
+  const API_BASE = `${config.API_URL}/donors`;
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(false);
 

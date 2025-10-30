@@ -108,7 +108,7 @@ const PressReleaseDetails = ({ isAdmin = false }) => {
 
   useEffect(() => {
     axios
-      .get(`${config.API_URL}/api/press-releases/${id}`)
+      .get(`${config.API_URL}/press-releases/${id}`)
       .then((res) => {
         setPressRelease(res.data);
         setLoading(false);
@@ -122,7 +122,7 @@ const PressReleaseDetails = ({ isAdmin = false }) => {
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete this press release?")) return;
     axios
-      .delete(`${config.API_URL}/api/press-releases/${id}`)
+      .delete(`${config.API_URL}/press-releases/${id}`)
       .then(() => {
         alert("Press release deleted!");
         navigate("/admin/press-releases");

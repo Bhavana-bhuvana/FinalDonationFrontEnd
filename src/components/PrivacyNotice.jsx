@@ -21,7 +21,7 @@ export default function PrivacyNotice({ isAdmin = false, onClose }) {
   };
 
   useEffect(() => {
-    fetch(`${config.API_URL}/api/privacy-policy`)
+    fetch(`${config.API_URL}/privacy-policy`)
       .then((res) => res.json())
       .then((data) => {
         setPolicy(data);
@@ -40,7 +40,7 @@ export default function PrivacyNotice({ isAdmin = false, onClose }) {
     try {
       setLoading(true);
 
-      const res = await fetch(`${config.API_URL}/api/privacy-policy`, {
+      const res = await fetch(`${config.API_URL}/privacy-policy`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editablePolicy),

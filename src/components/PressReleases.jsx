@@ -21,7 +21,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
 
   const fetchPressReleases = () => {
     axios
-      .get(`${config.API_URL}/api/press-releases`)
+      .get(`${config.API_URL}/press-releases`)
       .then((res) => {
         setPressReleases(res.data);
         setLoading(false);
@@ -38,7 +38,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
 
   const handleSave = async (release) => {
     try {
-      await axios.put(`${config.API_URL}/api/press-releases/${release.id}`, {
+      await axios.put(`${config.API_URL}/press-releases/${release.id}`, {
         title: release.title,
         excerpt: release.excerpt,
         summary: release.summary,
@@ -63,7 +63,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
 
     try {
       await axios.post(
-        `${config.API_URL}/api/press-releases/${release.id}/upload-image`,
+        `${config.API_URL}/press-releases/${release.id}/upload-image`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -79,7 +79,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
     if (!window.confirm("Are you sure you want to delete this press release?")) return;
 
     try {
-      await axios.delete(`${config.API_URL}/api/press-releases/${id}`);
+      await axios.delete(`${config.API_URL}/press-releases/${id}`);
       fetchPressReleases();
       alert("Press release deleted!");
     } catch (err) {
@@ -95,7 +95,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
     }
 
     try {
-      const res = await axios.post(`${config.API_URL}/api/press-releases`, {
+      const res = await axios.post(`${config.API_URL}/press-releases`, {
         title: newRelease.title,
         excerpt: newRelease.excerpt,
         summary: newRelease.summary,
@@ -109,7 +109,7 @@ const PressReleases = ({ isAdmin = false, limit, showAll = false, showBackButton
         const formData = new FormData();
         formData.append("file", newRelease.image);
         await axios.post(
-          `${config.API_URL}/api/press-releases/${created.id}/upload-image`,
+          `${config.API_URL}/press-releases/${created.id}/upload-image`,
           formData,
           { headers: { "Content-Type": "multipart/form-data" } }
         );
