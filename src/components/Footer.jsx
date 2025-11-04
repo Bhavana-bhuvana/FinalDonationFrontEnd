@@ -2,7 +2,6 @@
 
 import React from "react";
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from "react-icons/fa";
-
 const Footer = () => {
   const openContactModal = (e) => {
     e.preventDefault();
