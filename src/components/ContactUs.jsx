@@ -24,6 +24,7 @@ export default function ContactUs() {
   useEffect(() => {
     const handleOpen = () => openContact();
     document.addEventListener("openContact", handleOpen);
+        console.log("🔍 VITE_API_URL from config:", config.API_URL);
     return () => document.removeEventListener("openContact", handleOpen);
   }, []);
   const onSubmit = (data) => {
