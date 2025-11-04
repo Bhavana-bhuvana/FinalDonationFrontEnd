@@ -26,7 +26,6 @@ export default function PrivacyNotice({ isAdmin = false, onClose }) {
       .then((data) => {
         setPolicy(data);
         setEditablePolicy(JSON.parse(JSON.stringify(data)));
-          console.log("✅ API URL from config:", config.API_URL);
       })
       .catch((err) => console.error("Error fetching policy:", err));
 
