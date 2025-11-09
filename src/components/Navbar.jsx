@@ -293,11 +293,16 @@ const Navbar = () => {
       >
         <div className="container mx-auto flex justify-between items-center h-full">
           {/* logo */}
+          
           <div className="flex items-center">
-            <a href="/">
-              <img src="logo.svg" alt="logo" className="h-12 w-auto object-contain" />
-            </a>
-          </div>
+  <a href="/">
+    <img
+      src="Mainlogo.png"
+      alt="logo"
+      className="bg-transparent h-12 w-12 rounded-full object-cover "
+    />
+  </a>
+</div>
 
           {/* desktop nav */}
           <div className="hidden md:flex flex-grow justify-center">
