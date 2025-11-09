@@ -48,6 +48,8 @@ const handleEdit = () => {
           <div><strong>Address:</strong> {donationData.address}</div>
           <div><strong>Frequency:</strong> {donationData.frequency}</div>
           <div><strong>Amount:</strong> ₹{donationData.amount}</div>
+          <div><strong>Accepted Declaration:</strong> {donationData.declaration}</div>
+
           {donationData.paymentMode && (
             <div><strong>Payment Mode:</strong> {donationData.paymentMode}</div>
           )}
