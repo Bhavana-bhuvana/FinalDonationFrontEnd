@@ -27,21 +27,6 @@ select.valid,
 textarea.valid {
   @apply border-green-500 ring-1 ring-green-400;
 }
-
-/* OTP Input Field */
-.otp-input {
-  @apply w-full p-2 border border-gray-300 rounded-md tracking-widest text-center text-lg;
-}
-
-.otp-verified {
-  @apply border-green-500 ring-1 ring-green-400;
-}
-
-.otp-error {
-  @apply border-red-500 ring-1 ring-red-400;
-}
-
-
 /* Inputs & Labels */
 .form-section input[type="text"],
 .form-section input[type="email"],
@@ -73,7 +58,6 @@ textarea.valid {
 .declaration-row a {
   @apply text-blue-500 hover:underline;
 }
-
 
 /* Donation Amount Options */
 .amount-options {
