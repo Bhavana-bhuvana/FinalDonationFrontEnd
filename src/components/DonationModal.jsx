@@ -393,18 +393,31 @@ const verifyOtp = async () => {
         </div>
 
         {/* Declaration */}
-        <div className="form-section flex items-center">
-          <input type="checkbox" {...register("declaration")} className="mr-2" />
-          I am an Indian Citizen and I have read & understood the{" "}
-          <a onClick={() => setShowDeclaration(true)} className="text-text cursor-pointer">
-            declaration
-          </a>
-        </div>
-        {errors.declaration && <p className="error">{errors.declaration.message}</p>}
+        <div className="form-section declaration-row">
+  <label className="flex items-start gap-2 text-sm text-gray-700">
+    <input
+      type="checkbox"
+      {...register("declaration")}
+      className="mt-1 accent-primary"
+    />
+    <span>
+      I am an Indian Citizen and I have read & understood the{" "}
+      <a
+        onClick={() => setShowDeclaration(true)}
+        className="text-blue-600 hover:underline cursor-pointer"
+      >
+        declaration
+      </a>
+    </span>
+  </label>
+</div>
+{errors.declaration && (
+  <p className="error">{errors.declaration.message}</p>
+)}
 
-        <button type="submit" className="donate-btn">
-          Proceed to Verify Details
-        </button>
+<button type="submit" className="donate-btn">
+  Proceed to Verify Details
+</button>
       </form>
 
       {/* Declaration Popup */}
