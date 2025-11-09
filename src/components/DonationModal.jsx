@@ -457,8 +457,8 @@ const verifyOtp = async () => {
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li><span className="font-medium">Donations</span> will be accepted only from Indian citizens.</li>
               <li>No donations are accepted from corporate entities or any Government agencies.</li>
-              <li>All donations are received through <span className="font-medium">Credit Card, NACH, e-Mandates, online transfers, or cheques/drafts</span>, but never in cash.</li>
-              <li>Your donation is critical in running campaigns and enabling victories — we cannot do it without your help.</li>
+              <li>All donations are received through <span className="font-medium">Credit Card/NACH/e-Mandates or online or through cheques/drafts</span>,or through swiping machines, but never in cash.</li>
+              <li>Your donation is critical in running campaigns and enabling victories! We cannot do it without your help.</li>
             </ul>
           </div>
         </div>
@@ -466,5 +466,4 @@ const verifyOtp = async () => {
     </div>
   );
 }
-
 export default DonationModal;
