@@ -9,15 +9,11 @@ import config from "../config";
 
 function DonationModal() {
   const API_BASE = `${config.API_URL}`;
-console.log(config.Razor_Pay);
 
   // local UI state
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
   const [showDeclaration, setShowDeclaration] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
-  const [otp, setOtp] = useState("");
   const [inactive, setInactive] = useState(false);
   const timerRef = useRef(null);
 
@@ -45,18 +41,6 @@ const prefillData = location.state?.donationData || null;
   const frequencyValue = watch("frequency");
   const paymentModeValue = watch("paymentMode");
   const declarationChecked = watch("declaration");
-const emailValue = watch("email");
-
-useEffect(() => {
-  // If email changes, invalidate previously-sent OTP & verification
-  // but only do that if otpVerified or otpSent was true (to avoid trivial resets)
-  if (otpSent || otpVerified) {
-    setOtpSent(false);
-    setOtpVerified(false);
-    setOtp("");
-  }
-  // we intentionally do not call reset() here — we just reset otp state
-}, [emailValue]);
   // Reset amount fields on frequency change
   useEffect(() => {
     setAmount("");
@@ -111,83 +95,21 @@ useEffect(() => {
     fetchDeclaration();
   }, []);
 
-  // // OTP handlers
-  // const sendOtp = async () => {
-  //   const email = getValues("email");
-  //   if (!email) return alert("Enter email first");
-  //   try {
-  //     await axios.post(`${API_BASE}/otp/request?email=${encodeURIComponent(email)}`);
-  //     alert("OTP sent to your email ✅");
-  //     setOtpSent(true);
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Failed to send OTP ❌");
-  //   }
-  // };
-
-  // const verifyOtp = async () => {
-  //   const email = getValues("email");
-  //   if (!email || !otp) return alert("Enter OTP");
-  //   try {
-  //     await axios.post(
-  //       `${API_BASE}/otp/verify?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
-  //     );
-  //     setOtpVerified(true);
-  //     alert("Email verified successfully ✅");
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Invalid OTP ❌");
-  //   }
-  // };
-const sendOtp = async () => {
-  const email = getValues("email");
-  if (!email) return alert("Enter email first");
-  try {
-    await axios.post(`${API_BASE}/otp/request?email=${encodeURIComponent(email)}`);
-    alert(`OTP sent to ${email} ✅`);
-    setOtpSent(true);
-    setOtpVerified(false);
-    setOtp("");
-  } catch (err) {
-    console.error(err);
-    alert("Failed to send OTP ❌");
-  }
-};
-
-const verifyOtp = async () => {
-  const email = getValues("email");
-  if (!email || !otp) return alert("Enter OTP");
-  try {
-    await axios.post(
-      `${API_BASE}/otp/verify?email=${encodeURIComponent(email)}&otp=${encodeURIComponent(otp)}`
-    );
-    setOtpVerified(true);
-    alert("Email verified successfully ✅");
-  } catch (err) {
-    console.error(err);
-    alert("Invalid OTP ❌");
-    setOtpVerified(false);
-  }
-};
-
+ 
   const amounts = {
     monthly: ["800", "1200", "1800"],
     onetime: ["2000", "5000", "10000"],
   };
 
   const onSubmit = async (data) => {
-    if (!otpVerified) {
-      alert("Please verify your email with OTP before proceeding");
-      return;
-    }
     if (!data.declaration) {
+
       alert("Please accept the declaration before proceeding");
       return;
     }
-
     const freq = getValues("frequencyValue") || "monthly";
 
-    const donationData = {
+      const  donationData = {
       firstName: data.firstName,
       lastName: data.lastName,
       email: data.email,
@@ -195,30 +117,15 @@ const verifyOtp = async () => {
       dob: data.dob,
       idType: data.idType,
       uniqueId: data.uniqueId,
-      address: data.address,
       frequency: freq,
       amount: data.amount === "other" ? data.customAmount : data.amount,
       paymentMode: data.paymentMode,
       bankName: data.bankName,
       ifsc: data.ifsc,
       accountNumber: data.accountNumber,
+      declaration: "Accepted",
     };
       navigate("/review", { state: donationData });
-
-    // try {
-    //   await axios.post(`${API_BASE}/donors/save`, donationData);
-    //   alert("Donation details saved successfully ");
-    //   setAmount("");
-    //   setCustomAmount("");
-    //   setOtpSent(false);
-    //   setOtpVerified(false);
-    //   setOtp("");
-    //   reset();
-    //   navigate("/");
-    // } catch (err) {
-    //   console.error(err);
-    //   alert("Failed to save donation ");
-    // }
   };
 
   return (
@@ -286,47 +193,16 @@ const verifyOtp = async () => {
           </div>
           {errors.firstName && <p className="error">{errors.firstName.message}</p>}
           {errors.lastName && <p className="error">{errors.lastName.message}</p>}
-{/* Email + OTP */}
+{/* Email  */}
 <div className="input-row mt-3">
   <input
     type="email"
     placeholder="Email ID *"
     {...register("email")}
-    // user can edit email unless it's verified — this is good UX
-    disabled={otpVerified}
     className="border rounded px-2 flex-1"
   />
-  {/* Show Send or Resend based on otpSent and otpVerified */}
-  {!otpVerified && (
-    <button
-      type="button"
-      onClick={sendOtp}
-      className={`otp-btn text-white px-3 rounded ${!otpSent ? "bg-button" : "bg-gray-600"}`}
-    >
-      {otpSent ? "Resend OTP" : "Send OTP"}
-    </button>
-  )}
 </div>
-
 {errors.email && <p className="error">{errors.email.message}</p>}
-
-{/* OTP entry shown while OTP sent and not yet verified */}
-{otpSent && !otpVerified && (
-  <div className="input-row mt-2">
-    <input
-      type="text"
-      placeholder="Enter OTP"
-      value={otp}
-      onChange={(e) => setOtp(e.target.value)}
-      className="border rounded px-2 flex-1"
-    />
-    <button type="button" onClick={verifyOtp} className="verify-btn bg-button text-text px-3 rounded">
-      Verify
-    </button>
-  </div>
-)}
-
-{otpVerified && <p className="text-button">✅ Email Verified</p>}
 
           <input type="tel" placeholder="Mobile Number *" {...register("mobile")} className="border rounded px-2 mt-3 w-full" />
           {errors.mobile && <p className="error">{errors.mobile.message}</p>}
@@ -349,8 +225,6 @@ const verifyOtp = async () => {
             <input type="text" placeholder="Enter ID *" {...register("uniqueId")} className="border rounded px-2 flex-1" />
           </div>
           {errors.uniqueId && <p className="error">{errors.uniqueId.message}</p>}
-          <textarea placeholder="Address *" {...register("address")} className="border rounded px-2 w-full mt-3"></textarea>
-          {errors.address && <p className="error">{errors.address.message}</p>}
         </div>
 
         {/* Payment Mode */}
@@ -457,8 +331,8 @@ const verifyOtp = async () => {
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li><span className="font-medium">Donations</span> will be accepted only from Indian citizens.</li>
               <li>No donations are accepted from corporate entities or any Government agencies.</li>
-              <li>All donations are received through <span className="font-medium">Credit Card/NACH/e-Mandates or online or through cheques/drafts</span>,or through swiping machines, but never in cash.</li>
-              <li>Your donation is critical in running campaigns and enabling victories! We cannot do it without your help.</li>
+              <li>All donations are received through <span className="font-medium">Credit Card, NACH, e-Mandates, online transfers, or cheques/drafts</span>, but never in cash.</li>
+              <li>Your donation is critical in running campaigns and enabling victories — we cannot do it without your help.</li>
             </ul>
           </div>
         </div>
@@ -466,4 +340,5 @@ const verifyOtp = async () => {
     </div>
   );
 }
+
 export default DonationModal;
