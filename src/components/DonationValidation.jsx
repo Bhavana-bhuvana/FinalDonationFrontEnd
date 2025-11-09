@@ -110,6 +110,5 @@ export const DonationValidation = yup.object().shape({
           excludeEmptyString: true,
         }),
   }),
-  address: yup.string().required("Address is required"),
   declaration: yup.boolean().oneOf([true], "You must accept the declaration"),
 });
