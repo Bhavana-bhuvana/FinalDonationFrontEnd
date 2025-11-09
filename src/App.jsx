@@ -20,6 +20,9 @@ import ContactUs from './components/ContactUs'
 import PrivacyNotice from './components/PrivacyNotice';
 import ForgotPassword from '../Admin/ForgotPassword';
 import ResetPassword from "../Admin/ResetPassword"; 
+import ReviewPage from "./components/ReviewPage.jsx";
+import PaymentPage from "./components/PaymentPage.jsx";
+import ThankYouPage from "./components/ThankYouPage.jsx"
 // ProtectedRoute wrapper
 const ProtectedRoute = ({ children }) => {
   const isAdmin = localStorage.getItem("isAdmin") === "true";
@@ -89,6 +92,9 @@ function App() {
 
         {/* Other routes */}
         <Route path="/donate" element={<DonationModal />} />
+        <Route path="/review" element={<ReviewPage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/thankyou" element={<ThankYouPage />} />
         <Route path="/press-release/:id" element={<PressReleaseDetails />} />
         <Route path="/programmes/:id" element={<ProgrammeDetail />} />
         <Route path="/publications/:id" element={<PublicationDetail/>} />
