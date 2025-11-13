@@ -29,7 +29,6 @@ const handleEdit = () => {
       alert("Failed to save donation ❌");
     }
   };
-
   return (
     <div className="p-6 bg-gray-100 min-h-screen flex justify-center">
       <div className="bg-white shadow-md rounded-xl p-8 w-full max-w-2xl">
@@ -45,11 +44,9 @@ const handleEdit = () => {
           <div><strong>Date of Birth:</strong> {donationData.dob}</div>
           <div><strong>ID Type:</strong> {donationData.idType}</div>
           <div><strong>Unique ID:</strong> {donationData.uniqueId}</div>
-          <div><strong>Address:</strong> {donationData.address}</div>
           <div><strong>Frequency:</strong> {donationData.frequency}</div>
           <div><strong>Amount:</strong> ₹{donationData.amount}</div>
           <div><strong>Accepted Declaration:</strong> {donationData.declaration}</div>
-
           {donationData.paymentMode && (
             <div><strong>Payment Mode:</strong> {donationData.paymentMode}</div>
           )}
@@ -61,7 +58,6 @@ const handleEdit = () => {
             </>
           )}
         </div>
-
         <div className="mt-8 flex justify-between">
           <button
             onClick={handleEdit}
@@ -80,5 +76,4 @@ const handleEdit = () => {
     </div>
   );
 }
-
 export default ReviewPage;
