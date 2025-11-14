@@ -298,12 +298,9 @@ const Footer = ({ isAdmin = false }) => {
             </li>
             <li>
               <a
-                href="#privacy"
-                onClick={openPrivacyModal}
+                href="/privacy-policy"
                 className="hover:text-text/20 cursor-pointer"
               >
-                Privacy Policy
-              </a>
             </li>
           </ul>
         </div>
