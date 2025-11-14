@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import config from "../config";
 
-export default function PrivacyNotice({ isAdmin = false, onClose }) {
-  const [visible, setVisible] = useState(isAdmin);
+export default function PrivacyNotice({ isAdmin = false, onClose,showAsPage = false }) {
+  // const [visible, setVisible] = useState(isAdmin);
+    const [visible, setVisible] = useState(showAsPage ? true : isAdmin);
   const [showContent, setShowContent] = useState(isAdmin);
   const [policy, setPolicy] = useState(null);
   const [editablePolicy, setEditablePolicy] = useState(null);
@@ -149,205 +150,380 @@ export default function PrivacyNotice({ isAdmin = false, onClose }) {
   };
 
   // ---------- Render ----------
+  // return (
+  //   <div
+  //     className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity"
+  //     style={{ opacity: showContent ? 1 : 0 }}
+  //   >
+  //     <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+  //       {/* Header */}
+  //       <div className="flex justify-between items-start mb-4">
+  //         {editMode ? (
+  //           <input
+  //             value={safeData.title}
+  //             onChange={(e) => handleChange("title", e.target.value)}
+  //             className="text-2xl font-bold border-b w-full"
+  //           />
+  //         ) : (
+  //           <h2 className="text-2xl font-bold">{safeData.title}</h2>
+  //         )}
+  //         <button
+  //           onClick={() => (isAdmin && onClose ? onClose() : closePrivacy())}
+  //           className="text-gray-500 hover:text-gray-800 text-xl font-bold"
+  //         >
+  //           &times;
+  //         </button>
+  //       </div>
+
+  //       {/* Subheading */}
+  //       {editMode ? (
+  //         <input
+  //           value={safeData.subHeadingTitle}
+  //           onChange={(e) =>
+  //             handleChange("subHeadingTitle", e.target.value)
+  //           }
+  //           className="text-lg font-medium border-b w-full mb-4"
+  //           placeholder="Subheading"
+  //         />
+  //       ) : (
+  //         safeData.subHeadingTitle && (
+  //           <h3 className="text-lg font-medium mb-4">
+  //             {safeData.subHeadingTitle}
+  //           </h3>
+  //         )
+  //       )}
+
+  //       {/* Effective Date */}
+  //       <p className="mb-3">
+  //         <strong>Effective Date: </strong>
+  //         {editMode ? (
+  //           <input
+  //             type="date"
+  //             value={safeData.effectiveDate}
+  //             onChange={(e) =>
+  //               handleChange("effectiveDate", e.target.value)
+  //             }
+  //             className="border rounded px-2 py-1 text-sm"
+  //           />
+  //         ) : (
+  //           safeData.effectiveDate || "Not specified"
+  //         )}
+  //       </p>
+
+  //       {/* Sections */}
+  //       {(safeData.content || []).map((section, sIdx) => (
+  //         <div
+  //           key={sIdx}
+  //           className="border p-3 rounded bg-gray-50 mb-4 shadow-sm"
+  //         >
+  //           <div className="flex justify-between items-center mb-2">
+  //             {editMode ? (
+  //               <input
+  //                 value={section.sectionTitle}
+  //                 onChange={(e) =>
+  //                   handleChange(`content.${sIdx}.sectionTitle`, e.target.value)
+  //                 }
+  //                 className="font-semibold border-b w-full"
+  //                 placeholder="Section Title"
+  //               />
+  //             ) : (
+  //               <h4 className="font-semibold">{section.sectionTitle}</h4>
+  //             )}
+  //             {editMode && (
+  //               <button
+  //                 onClick={() => deleteSection(sIdx)}
+  //                 className="text-red-600 font-bold ml-2"
+  //               >
+  //                 Delete
+  //               </button>
+  //             )}
+  //           </div>
+
+  //           <ul className="list-disc ml-6">
+  //             {(section.body || []).map((line, lIdx) => (
+  //               <li key={lIdx} className="flex items-center mb-1">
+  //                 {editMode ? (
+  //                   <>
+  //                     <input
+  //                       value={line}
+  //                       onChange={(e) =>
+  //                         handleChange(`content.${sIdx}.body.${lIdx}`, e.target.value)
+  //                       }
+  //                       className="border-b w-full text-sm"
+  //                     />
+  //                     <button
+  //                       onClick={() => deleteLine(sIdx, lIdx)}
+  //                       className="text-red-600 font-bold ml-2"
+  //                     >
+  //                       &times;
+  //                     </button>
+  //                   </>
+  //                 ) : (
+  //                   line
+  //                 )}
+  //               </li>
+  //             ))}
+  //           </ul>
+
+  //           {editMode && (
+  //             <button
+  //               onClick={() => addLine(sIdx)}
+  //               className="mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
+  //             >
+  //               Add Line
+  //             </button>
+  //           )}
+  //         </div>
+  //       ))}
+
+  //       {editMode && (
+  //         <button
+  //           onClick={addSection}
+  //           className="mt-4 px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+  //         >
+  //           Add Section
+  //         </button>
+  //       )}
+
+  //       {/* Contact */}
+  //       <h3 className="font-semibold mt-4">Contact Us</h3>
+  //       <ul className="list-disc ml-6">
+  //         <li>
+  //           Email:{" "}
+  //           {editMode ? (
+  //             <input
+  //               value={safeData.contact.email}
+  //               onChange={(e) => handleChange("contact.email", e.target.value)}
+  //               className="border-b w-1/2 text-sm"
+  //             />
+  //           ) : (
+  //             safeData.contact.email
+  //           )}
+  //         </li>
+  //         <li>
+  //           Phone:{" "}
+  //           {editMode ? (
+  //             <input
+  //               value={safeData.contact.phone}
+  //               onChange={(e) => handleChange("contact.phone", e.target.value)}
+  //               className="border-b w-1/2 text-sm"
+  //             />
+  //           ) : (
+  //             safeData.contact.phone
+  //           )}
+  //         </li>
+  //       </ul>
+
+  //       {/* Admin Controls */}
+  //       {isAdmin && (
+  //         <div className="mt-6 flex justify-end space-x-3">
+  //           {editMode ? (
+  //             <>
+  //               <button
+  //                 onClick={() => {
+  //                   setEditMode(false);
+  //                   setEditablePolicy(JSON.parse(JSON.stringify(policy)));
+  //                 }}
+  //                 className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
+  //               >
+  //                 Cancel
+  //               </button>
+  //               <button
+  //                 onClick={handleSave}
+  //                 disabled={loading}
+  //                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+  //               >
+  //                 {loading ? "Saving..." : "Save Changes"}
+  //               </button>
+  //             </>
+  //           ) : (
+  //             <button
+  //               onClick={() => setEditMode(true)}
+  //               className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+  //             >
+  //               Edit Policy
+  //             </button>
+  //           )}
+  //         </div>
+  //       )}
+  //     </div>
+  //   </div>
+  // );
   return (
+  <div
+    id="privacy"
+    className={
+      showAsPage
+        ? "min-h-screen bg-[#f5f5f5] py-16 px-4"
+        : "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300"
+    }
+    style={showAsPage ? {} : { opacity: showContent ? 1 : 0 }}
+  >
     <div
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity"
-      style={{ opacity: showContent ? 1 : 0 }}
+      className={
+        showAsPage
+          ? "bg-white rounded-2xl shadow-md p-10 max-w-4xl mx-auto"
+          : `bg-white rounded-2xl shadow-2xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto transform transition-transform duration-300 ${
+              showContent ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
+            }`
+      }
     >
-      <div className="bg-white rounded-2xl shadow-2xl p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex justify-between items-start mb-4">
-          {editMode ? (
-            <input
-              value={safeData.title}
-              onChange={(e) => handleChange("title", e.target.value)}
-              className="text-2xl font-bold border-b w-full"
-            />
-          ) : (
-            <h2 className="text-2xl font-bold">{safeData.title}</h2>
-          )}
+      {/* Header Row */}
+      <div className="flex justify-between items-start mb-4">
+        {editMode ? (
+          <input
+            value={displayData?.title || ""}
+            onChange={(e) => handleChange("title", e.target.value)}
+            className="text-2xl font-bold text-gray-800 border-b w-full focus:outline-none"
+          />
+        ) : (
+          <h2 className="text-2xl font-bold text-gray-800">
+            {displayData?.title || "Privacy Policy"}
+          </h2>
+        )}
+
+        {/* ❌ REMOVE CLOSE BUTTON IN FULL PAGE */}
+        {!showAsPage && (
           <button
-            onClick={() => (isAdmin && onClose ? onClose() : closePrivacy())}
-            className="text-gray-500 hover:text-gray-800 text-xl font-bold"
+            onClick={() => {
+              if (isAdmin && onClose) onClose();
+              else closePrivacy();
+            }}
+            className="text-gray-500 hover:text-gray-800 text-xl font-bold transition"
+            title="Close"
           >
             &times;
           </button>
-        </div>
-
-        {/* Subheading */}
-        {editMode ? (
-          <input
-            value={safeData.subHeadingTitle}
-            onChange={(e) =>
-              handleChange("subHeadingTitle", e.target.value)
-            }
-            className="text-lg font-medium border-b w-full mb-4"
-            placeholder="Subheading"
-          />
-        ) : (
-          safeData.subHeadingTitle && (
-            <h3 className="text-lg font-medium mb-4">
-              {safeData.subHeadingTitle}
-            </h3>
-          )
         )}
+      </div>
 
-        {/* Effective Date */}
-        <p className="mb-3">
-          <strong>Effective Date: </strong>
-          {editMode ? (
-            <input
-              type="date"
-              value={safeData.effectiveDate}
-              onChange={(e) =>
-                handleChange("effectiveDate", e.target.value)
-              }
-              className="border rounded px-2 py-1 text-sm"
-            />
-          ) : (
-            safeData.effectiveDate || "Not specified"
-          )}
-        </p>
+      {/* ==== REST OF YOUR CODE EXACTLY AS IT IS ==== */}
+      {!policy ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="text-gray-700 text-sm space-y-4">
+          {/* Effective Date */}
+          <p>
+            <strong>Effective Date:</strong>{" "}
+            {editMode ? (
+              <input
+                type="text"
+                value={displayData?.effectiveDate || ""}
+                onChange={(e) => handleChange("effectiveDate", e.target.value)}
+                className="border rounded px-2 py-1 text-sm"
+              />
+            ) : (
+              displayData?.effectiveDate
+            )}
+          </p>
 
-        {/* Sections */}
-        {(safeData.content || []).map((section, sIdx) => (
-          <div
-            key={sIdx}
-            className="border p-3 rounded bg-gray-50 mb-4 shadow-sm"
-          >
-            <div className="flex justify-between items-center mb-2">
+          {/* Content Sections */}
+          {displayData?.content?.map((section, idx) => (
+            <div key={idx}>
               {editMode ? (
                 <input
+                  type="text"
                   value={section.sectionTitle}
                   onChange={(e) =>
-                    handleChange(`content.${sIdx}.sectionTitle`, e.target.value)
+                    handleChange(`content.${idx}.sectionTitle`, e.target.value)
                   }
-                  className="font-semibold border-b w-full"
-                  placeholder="Section Title"
+                  className="font-semibold border-b w-full mb-2"
                 />
               ) : (
-                <h4 className="font-semibold">{section.sectionTitle}</h4>
+                <h3 className="font-semibold mt-4">{section.sectionTitle}</h3>
               )}
-              {editMode && (
-                <button
-                  onClick={() => deleteSection(sIdx)}
-                  className="text-red-600 font-bold ml-2"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
 
-            <ul className="list-disc ml-6">
-              {(section.body || []).map((line, lIdx) => (
-                <li key={lIdx} className="flex items-center mb-1">
-                  {editMode ? (
-                    <>
+              <ul className="list-disc ml-6">
+                {section.body.map((line, i) => (
+                  <li key={i}>
+                    {editMode ? (
                       <input
+                        type="text"
                         value={line}
                         onChange={(e) =>
-                          handleChange(`content.${sIdx}.body.${lIdx}`, e.target.value)
+                          handleChange(`content.${idx}.body.${i}`, e.target.value)
                         }
                         className="border-b w-full text-sm"
                       />
-                      <button
-                        onClick={() => deleteLine(sIdx, lIdx)}
-                        className="text-red-600 font-bold ml-2"
-                      >
-                        &times;
-                      </button>
-                    </>
-                  ) : (
-                    line
-                  )}
-                </li>
-              ))}
-            </ul>
+                    ) : (
+                      line
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
 
-            {editMode && (
-              <button
-                onClick={() => addLine(sIdx)}
-                className="mt-1 px-2 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm"
-              >
-                Add Line
-              </button>
-            )}
-          </div>
-        ))}
+          {/* Contact Section */}
+          <h3 className="font-semibold mt-4">Contact Us</h3>
+          <ul className="list-disc ml-6">
+            <li>
+              Email:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={displayData?.contact?.email || ""}
+                  onChange={(e) =>
+                    handleChange("contact.email", e.target.value)
+                  }
+                  className="border-b w-1/2 text-sm"
+                />
+              ) : (
+                displayData?.contact?.email
+              )}
+            </li>
+            <li>
+              Phone:{" "}
+              {editMode ? (
+                <input
+                  type="text"
+                  value={displayData?.contact?.phone || ""}
+                  onChange={(e) =>
+                    handleChange("contact.phone", e.target.value)
+                  }
+                  className="border-b w-1/2 text-sm"
+                />
+              ) : (
+                displayData?.contact?.phone
+              )}
+            </li>
+          </ul>
 
-        {editMode && (
-          <button
-            onClick={addSection}
-            className="mt-4 px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            Add Section
-          </button>
-        )}
-
-        {/* Contact */}
-        <h3 className="font-semibold mt-4">Contact Us</h3>
-        <ul className="list-disc ml-6">
-          <li>
-            Email:{" "}
-            {editMode ? (
-              <input
-                value={safeData.contact.email}
-                onChange={(e) => handleChange("contact.email", e.target.value)}
-                className="border-b w-1/2 text-sm"
-              />
-            ) : (
-              safeData.contact.email
-            )}
-          </li>
-          <li>
-            Phone:{" "}
-            {editMode ? (
-              <input
-                value={safeData.contact.phone}
-                onChange={(e) => handleChange("contact.phone", e.target.value)}
-                className="border-b w-1/2 text-sm"
-              />
-            ) : (
-              safeData.contact.phone
-            )}
-          </li>
-        </ul>
-
-        {/* Admin Controls */}
-        {isAdmin && (
-          <div className="mt-6 flex justify-end space-x-3">
-            {editMode ? (
-              <>
+          {/* Admin Buttons */}
+          {isAdmin && (
+            <div className="mt-6 flex justify-end space-x-3">
+              {editMode ? (
+                <>
+                  <button
+                    onClick={() => setEditMode(false)}
+                    className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSave}
+                    disabled={loading}
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                  >
+                    {loading ? "Saving..." : "Save Changes"}
+                  </button>
+                </>
+              ) : (
                 <button
-                  onClick={() => {
-                    setEditMode(false);
-                    setEditablePolicy(JSON.parse(JSON.stringify(policy)));
-                  }}
-                  className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSave}
-                  disabled={loading}
+                  onClick={() => setEditMode(true)}
                   className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
                 >
-                  {loading ? "Saving..." : "Save Changes"}
+                  Edit Policy
                 </button>
-              </>
-            ) : (
-              <button
-                onClick={() => setEditMode(true)}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
-              >
-                Edit Policy
-              </button>
-            )}
-          </div>
-        )}
-      </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
-  );
+  </div>
+);
+
 }
 
 // import React, { useState, useEffect } from "react";
