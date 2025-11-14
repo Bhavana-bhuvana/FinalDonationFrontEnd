@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import config from "../config";
+import DeclarationPage from "./DeclarationPage";
 
 function DonationModal() {
   const API_BASE = `${config.API_URL}`;
@@ -13,7 +14,6 @@ function DonationModal() {
   // local UI state
   const [amount, setAmount] = useState("");
   const [customAmount, setCustomAmount] = useState("");
-  const [showDeclaration, setShowDeclaration] = useState(false);
   const [inactive, setInactive] = useState(false);
   const timerRef = useRef(null);
 
@@ -97,8 +97,8 @@ useEffect(() => {
 
  
   const amounts = {
-    monthly: ["800", "1200", "1800" ,"2500"],
-    onetime: ["1000","2000", "5000", "10000","8000"],
+    monthly: ["800", "1200", "1800"],
+    onetime: ["2000", "5000", "10000"],
   };
 
   const onSubmit = async (data) => {
@@ -267,56 +267,40 @@ useEffect(() => {
         </div>
 
         {/* Declaration */}
-        <div className="form-section declaration-row">
-  <label className="flex items-start gap-2 text-sm text-gray-700">
+<div className="form-section mt-4">
+
+  <div className="flex items-center gap-3 w-full max-w-[500px]">
+
+    {/* Checkbox */}
     <input
       type="checkbox"
       {...register("declaration")}
-      className="mt-1 accent-primary"
+      className="w-4 h-4 accent-primary cursor-pointer"
     />
-    <span>
+
+    {/* Text */}
+    <span className="text-sm text-gray-700">
       I am an Indian Citizen and I have read & understood the{" "}
-      <a
-        onClick={() => setShowDeclaration(true)}
-        className="text-blue-600 hover:underline cursor-pointer"
+      <span
+        onClick={() => navigate("/declaration")}
+        className="text-blue-600 hover:underline cursor-pointer font-medium"
       >
         declaration
-      </a>
+      </span>
     </span>
-  </label>
+
+  </div>
+
+  {errors.declaration && (
+    <p className="error mt-1">{errors.declaration.message}</p>
+  )}
 </div>
-{errors.declaration && (
-  <p className="error">{errors.declaration.message}</p>
-)}
+
 
 <button type="submit" className="donate-btn">
   Proceed to Verify Details
 </button>
       </form>
-
-      {/* Declaration Popup */}
-      {showDeclaration && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-button w-1/2 p-6 rounded-xl shadow-lg">
-            <div className="flex justify-between items-center">
-              {loadingDeclaration ? (
-                <p>Loading...</p>
-              ) : (
-                <h2 className="text-xl font-bold">{declarationData.title}</h2>
-              )}
-              <button onClick={() => setShowDeclaration(false)}>✖</button>
-            </div>
-            <div className="mt-4 max-h-60 overflow-y-auto">
-              {loadingDeclaration ? <p>Loading...</p> : <p>{declarationData.content}</p>}
-            </div>
-            <div className="mt-4 flex justify-end">
-              <button onClick={() => setShowDeclaration(false)} className="bg-primary text-text px-3 py-1 rounded">
-                I Agree
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="donate-info">
         <div className="info-box bg-white shadow-md rounded-xl p-6 space-y-4 text-gray-800">
