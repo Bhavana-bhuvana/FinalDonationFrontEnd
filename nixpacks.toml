@@ -1,8 +1,11 @@
 [phases.setup]
-nixPkgs = ["nodejs_20", "npm"]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci"]
 
 [phases.build]
-cmds = ["npm ci", "npm run build"]
+cmds = ["npm run build"]
 
 [phases.start]
 cmds = [
@@ -12,3 +15,4 @@ cmds = [
 
 [static]
 buildDir = "dist"
+
