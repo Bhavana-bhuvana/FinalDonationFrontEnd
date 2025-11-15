@@ -1,33 +1,16 @@
+
 // import React from "react";
 // import { motion, useReducedMotion } from "framer-motion";
-// import * as FaIcons from "react-icons/fa";
 
 // const HeroMessage = ({ isAdmin = false, lines = [], onChange }) => {
 //   const shouldReduceMotion = useReducedMotion();
-
-//   const iconOptions = [
-//     { name: "Utensils", value: "FaUtensils" },
-//     { name: "Smile", value: "FaSmile" },
-//     { name: "Handshake", value: "FaHandsHelping" },
-//     { name: "Heart", value: "FaHeart" },
-//     { name: "Apple", value: "FaAppleAlt" },
-//     { name: "Leaf", value: "FaLeaf" },
-//     { name: "Gift", value: "FaGift" },
-//     { name: "Star", value: "FaStar" },
-//   ];
-
-//   const renderIcon = (iconName, size = 18, color = "text-yellow-200") => {
-//     const IconComponent = FaIcons[iconName];
-//     return IconComponent ? <IconComponent className={color} size={size} /> : null;
-//   };
-
 //   const safeLines =
 //     lines?.length
 //       ? lines
 //       : [
-//           { text: "Share a Meal", icon: "FaUtensils" },
-//           { text: "Share a Smile", icon: "FaSmile" },
-//           { text: "Join Hands to End Hunger", icon: "FaHandsHelping" },
+//           { text: "Share a Meal" },
+//           { text: "Share a Smile" },
+//           { text: "Join Hands to End Hunger" },
 //         ];
 
 //   const handleChange = (idx, field, value) => {
@@ -44,8 +27,7 @@
 //     <motion.div
 //       {...motionProps}
 //       className="
-//         relative z-30 mx-auto rounded-2xl bg-black/50 backdrop-blur-sm
-//         shadow-[0_8px_30px_rgba(0,0,0,0.25)]
+//         relative  mx-auto rounded-2xl  
 //         p-3 sm:p-4 md:p-5
 //         w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl
 //         max-h-[42svh] sm:max-h-[45svh] md:max-h-[48svh]
@@ -76,28 +58,6 @@
 //                   "
 //                   placeholder="Message"
 //                 />
-//                 <div className="flex items-center gap-2">
-//                   <label htmlFor={`icon-${idx}`} className="text-white/80 text-xs sm:text-sm">
-//                     Icon
-//                   </label>
-//                   <select
-//                     id={`icon-${idx}`}
-//                     value={line.icon}
-//                     onChange={(e) => handleChange(idx, "icon", e.target.value)}
-//                     className="
-//                       px-3 py-2 rounded-md
-//                       text-black text-sm sm:text-base
-//                       bg-white/95 focus:bg-white
-//                       outline-none ring-1 ring-inset ring-white/20 focus:ring-2 focus:ring-yellow-300
-//                     "
-//                   >
-//                     {iconOptions.map((icon) => (
-//                       <option key={icon.value} value={icon.value}>
-//                         {icon.name}
-//                       </option>
-//                     ))}
-//                   </select>
-//                 </div>
 //               </div>
 //             );
 //           }
@@ -131,12 +91,6 @@
 //               >
 //                 {line.text}
 //               </p>
-
-//               {/* Icon AFTER text */}
-//               <span className="inline-flex items-center shrink-0">
-//                 {renderIcon(line.icon, 18)}
-//                 <span className="sr-only">icon</span>
-//               </span>
 //             </div>
 //           );
 //         })}
@@ -146,35 +100,75 @@
 // };
 
 // export default HeroMessage;
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
+import config from "../config";
 
-const HeroMessage = ({ isAdmin = false, lines = [], onChange }) => {
+const MAX_LINES = 5;
+
+const HeroMessage = ({ isAdmin = false }) => {
   const shouldReduceMotion = useReducedMotion();
-  const safeLines =
-    lines?.length
-      ? lines
-      : [
+  const [lines, setLines] = useState([]);
+
+  // Load messages from backend
+  useEffect(() => {
+    fetch(`${config.API_URL}/messages`)
+      .then((res) => res.json())
+      .then((data) => {
+        setLines(data.heroMessages || []);
+      })
+      .catch(() => {
+        // fallback default if API fails
+        setLines([
           { text: "Share a Meal" },
           { text: "Share a Smile" },
           { text: "Join Hands to End Hunger" },
-        ];
+        ]);
+      });
+  }, []);
 
   const handleChange = (idx, field, value) => {
-    if (!onChange) return;
-    const updated = safeLines.map((l, i) => (i === idx ? { ...l, [field]: value } : l));
-    onChange(updated);
+    const updated = lines.map((l, i) =>
+      i === idx ? { ...l, [field]: value } : l
+    );
+    setLines(updated);
+  };
+
+  const handleAdd = () => {
+    if (lines.length >= MAX_LINES) return;
+    setLines([...lines, { text: "" }]);
+  };
+
+  const handleDelete = (idx) => {
+    const updated = lines.filter((_, i) => i !== idx);
+    setLines(updated);
+  };
+
+  // Save to backend
+  const handleSave = async () => {
+    await fetch(`${config.API_URL}/messages`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ heroMessages: lines }),
+    });
+
+    alert("Messages saved!");
   };
 
   const motionProps = shouldReduceMotion
     ? {}
-    : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { delay: 0.4, duration: 0.5, ease: "easeOut" } };
+    : {
+        initial: { opacity: 0, y: 14 },
+        animate: { opacity: 1, y: 0 },
+        transition: { delay: 0.4, duration: 0.5, ease: "easeOut" },
+      };
 
   return (
     <motion.div
       {...motionProps}
       className="
-        relative  mx-auto rounded-2xl  
+        relative mx-auto rounded-2xl backdrop-blur-sm
+        shadow-[0_8px_30px_rgba(0,0,0,0.25)]
         p-3 sm:p-4 md:p-5
         w-full max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl
         max-h-[42svh] sm:max-h-[45svh] md:max-h-[48svh]
@@ -190,48 +184,59 @@ const HeroMessage = ({ isAdmin = false, lines = [], onChange }) => {
       </h3>
 
       <div className="mt-3 sm:mt-4 space-y-2.5">
-        {safeLines.map((line, idx) => {
+        {lines.map((line, idx) => {
           if (isAdmin) {
             return (
               <div key={idx} className="flex flex-col items-center gap-2.5">
-                <input
-                  value={line.text}
-                  onChange={(e) => handleChange(idx, "text", e.target.value)}
-                  className="
-                    w-full px-3 py-2 rounded-md
-                    text-black text-sm sm:text-base
-                    placeholder:text-gray-500 bg-white/95 focus:bg-white
-                    outline-none ring-1 ring-inset ring-white/20 focus:ring-2 focus:ring-yellow-300
-                  "
-                  placeholder="Message"
-                />
+                <div className="w-full flex items-center gap-2">
+                  <input
+                    value={line.text}
+                    onChange={(e) =>
+                      handleChange(idx, "text", e.target.value)
+                    }
+                    className="
+                      w-full px-3 py-2 rounded-md
+                      text-black text-sm sm:text-base
+                      placeholder:text-gray-500 bg-white/95 focus:bg-white
+                      outline-none ring-1 ring-inset ring-white/20 
+                      focus:ring-2 focus:ring-yellow-300
+                    "
+                    placeholder="Message"
+                  />
+
+                  <button
+                    onClick={() => handleDelete(idx)}
+                    className="
+                      px-3 py-2 text-sm bg-red-500 text-white rounded-md 
+                      hover:bg-red-600 transition
+                    "
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
             );
           }
 
-          // Viewer mode: CENTERED text, icon AFTER the text
           return (
             <div
               key={idx}
               className="
                 flex items-center justify-center
-                gap-2
-                text-white
+                gap-2 text-white
                 text-[clamp(0.85rem,1.4vw,1.125rem)]
-                leading-snug
-                px-2
+                leading-snug px-2
               "
             >
               <p
                 title={line.text}
                 className="
                   whitespace-pre-wrap break-words hyphens-auto
-                  text-center
-                  max-w-[60ch]
+                  text-center max-w-[60ch]
                 "
                 style={{
                   display: "-webkit-box",
-                  WebkitLineClamp: 4,      // adjust if you want more/less lines visible
+                  WebkitLineClamp: 4,
                   WebkitBoxOrient: "vertical",
                   overflow: "hidden",
                 }}
@@ -242,8 +247,41 @@ const HeroMessage = ({ isAdmin = false, lines = [], onChange }) => {
           );
         })}
       </div>
+
+      {isAdmin && (
+        <>
+          <button
+            onClick={handleAdd}
+            disabled={lines.length >= MAX_LINES}
+            className={`
+              mt-4 w-full py-2 rounded-md text-sm font-semibold 
+              ${
+                lines.length >= MAX_LINES
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-green-500 hover:bg-green-600"
+              }
+              text-white transition
+            `}
+          >
+            {lines.length >= MAX_LINES
+              ? "Maximum 5 messages reached"
+              : "Add Message"}
+          </button>
+
+          <button
+            onClick={handleSave}
+            className="
+              mt-3 w-full py-2 rounded-md bg-blue-500 text-white 
+              font-semibold hover:bg-blue-600 transition
+            "
+          >
+            Save Messages
+          </button>
+        </>
+      )}
     </motion.div>
   );
 };
 
 export default HeroMessage;
+
