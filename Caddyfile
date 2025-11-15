@@ -1,7 +1,5 @@
-:80
-
-root * /app/dist
-file_server
-
-# React Router fix
-try_files {path} /index.html
+:80 {
+    root * /app/build
+    file_server
+    try_files {path} /index.html
+}
